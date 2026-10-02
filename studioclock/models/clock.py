@@ -14,5 +14,6 @@ class Clock(Model):
     clock_type = TextField(choices=ClockType.choices, default=ClockType.LED)
 
     class Meta:
+        ordering = ["name"]
         verbose_name = "Clock"
         verbose_name_plural = "Clocks"
