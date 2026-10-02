@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Create New Clock{% endblock %}
+{% block page_title %}Create New Clock{% endblock %}
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="{{ form.name.id_for_label }}" class="form-label">Clock Name</label>
+            <input type="text"
+                   name="{{ form.name.html_name }}"
+                   id="{{ form.name.id_for_label }}"
+                   class="form-control"
+                   required>
+            {% for error in form.name.errors %}
+                <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Create Clock</button>
+    </form>
+{% endblock %}
