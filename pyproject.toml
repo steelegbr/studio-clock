@@ -18,4 +18,5 @@ dev = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
+"**/forms/*.py" = ["RUF012"]
 "**/migrations/*.py" = ["RUF012"]
