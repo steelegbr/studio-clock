@@ -20,7 +20,8 @@
                     <td>{{ clock.name }}</td>
                     <td>{{ clock.description }}</td>
                     <td>
-                        <a href="#" class="btn btn-primary btn-sm"><i class="bi bi-clock"></i> View</a>
+                        <a href="{% url 'clock:render' pk=clock.pk %}"
+                           class="btn btn-primary btn-sm"><i class="bi bi-clock"></i> View</a>
                         {% if perms.studioclock.change_clock %}
                             <a href="{% url 'clock:edit' pk=clock.pk %}"
                                class="btn btn-secondary btn-sm"><i class="bi bi-pencil"></i> Edit</a>

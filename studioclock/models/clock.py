@@ -1,5 +1,6 @@
 from uuid import uuid4
 
+from colorfield.fields import ColorField
 from django.db.models import Model, TextChoices, TextField, UUIDField
 
 
@@ -12,6 +13,8 @@ class Clock(Model):
     name = TextField(unique=True, blank=False, null=False)
     description = TextField(blank=True, null=True)
     clock_type = TextField(choices=ClockType.choices, default=ClockType.LED)
+    led_colour = ColorField(default="#FF0000", blank=False, null=False)
+    led_background_colour = ColorField(default="#000000", blank=False, null=False)
 
     class Meta:
         ordering = ["name"]
