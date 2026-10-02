@@ -32,6 +32,7 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1", "[:
 
 INSTALLED_APPS = [
     "unfold",
+    "studioclock",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
