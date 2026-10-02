@@ -12,9 +12,12 @@
                 integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
                 crossorigin="anonymous"></script>
     </head>
-    <body>
+    <body class="bg-light">
         {% include "includes/navbar.html" %}
         <div class="container mt-4">
+            <h1>
+                {% block page_title %}{% endblock %}
+            </h1>
             {% block content %}{% endblock %}
         </div>
     </body>
