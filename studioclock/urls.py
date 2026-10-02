@@ -8,5 +8,6 @@ from django.urls import include, path
 urlpatterns = [
     path("", include("studioclock.routes.base")),
     path("admin/", admin.site.urls),
+    path("clock/", include("studioclock.routes.clock")),
     path("users/", include("django.contrib.auth.urls")),
 ]

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Clocks{% endblock %}
+{% block page_title %}Clocks{% endblock %}
+{% block content %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Clock</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for clock in object_list %}
+                <tr>
+                    <td>{{ clock.name }}</td>
+                    <td>{{ clock.description }}</td>
+                    <td>Actions...</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">No clocks available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% include "includes/pagination.html" %}
+{% endblock %}
