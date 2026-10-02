@@ -63,7 +63,7 @@ function renderSeconds(canvas, boxSize, colour = 'red', dotRadius = 3, now = new
     const width = canvas.width / window.devicePixelRatio;
     const height = canvas.height / window.devicePixelRatio;
     const ringSpacing = Math.min(dotRadius * 24, boxSize / 8);
-    const radius = boxSize / 2 - ringSpacing * 2;
+    const radius = boxSize / 2 - ringSpacing * 1.6;
 
     for (let i = 0; i < seconds; i++) {
         const angle = (i * 6 - 90) * Math.PI / 180; // Convert degrees to radians
@@ -89,7 +89,7 @@ function renderDigitalTime(canvas, boxSize, now, colour = 'red', dotRadius = 3) 
         .join(':');
     const columns = time.length * 5 + time.length - 1;
     const ringSpacing = Math.min(dotRadius * 24, boxSize / 8);
-    const innerRadius = boxSize / 2 - ringSpacing * 2;
+    const innerRadius = boxSize / 2 - ringSpacing * 1.85;
     const pitch = Math.min(dotRadius * 4.5, (innerRadius * 1.5) / columns);
     const textWidth = (columns - 1) * pitch;
     const textHeight = 6 * pitch;
