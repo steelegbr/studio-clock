@@ -2,6 +2,7 @@
 Django settings for studioclock project.
 """
 
+import sys
 from pathlib import Path
 
 import environ
@@ -71,16 +72,28 @@ WSGI_APPLICATION = "studioclock.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": env("DB_NAME"),
-        "USER": env("DB_USER"),
-        "PASSWORD": env("DB_PASSWORD"),
-        "HOST": env("DB_HOST"),
-        "PORT": env("DB_PORT"),
+TESTING = "test" in sys.argv
+POSTGRES_ENV_VARS = ("DB_NAME", "DB_USER", "DB_HOST")
+HAS_POSTGRES_CONFIG = all(env(var, default="") not in (None, "") for var in POSTGRES_ENV_VARS)
+
+if TESTING or not HAS_POSTGRES_CONFIG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env("DB_NAME"),
+            "USER": env("DB_USER"),
+            "PASSWORD": env("DB_PASSWORD", default=""),
+            "HOST": env("DB_HOST"),
+            "PORT": env("DB_PORT", default="5432"),
+        }
+    }
 
 
 # Password validation
