@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Create New Clock{% endblock %}
+{% block page_title %}Create New Clock{% endblock %}
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            {% include "includes/form_field.html" with field=field %}
+        {% endfor %}
+        <button type="submit" class="btn btn-primary w-100">Create Clock</button>
+        <a href="{% url 'clock:list' %}" class="btn btn-secondary w-100 mt-2">Cancel</a>
+    </form>
+{% endblock %}

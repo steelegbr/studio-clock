@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Clocks{% endblock %}
+{% block page_title %}Clocks{% endblock %}
+{% block content %}
+    {% if perms.studioclock.add_clock %}
+        <a href="{% url 'clock:create' %}"
+           class="btn btn-primary mb-3"><i class="bi bi-plus-circle"></i> Create New Clock</a>
+    {% endif %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Clock</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for clock in object_list %}
+                <tr>
+                    <td>{{ clock.name }}</td>
+                    <td>{{ clock.description }}</td>
+                    <td>
+                        <a href="#" class="btn btn-primary btn-sm"><i class="bi bi-clock"></i> View</a>
+                        {% if perms.studioclock.change_clock %}
+                            <a href="{% url 'clock:edit' pk=clock.pk %}"
+                               class="btn btn-secondary btn-sm"><i class="bi bi-pencil"></i> Edit</a>
+                        {% endif %}
+                        {% if perms.studioclock.delete_clock %}
+                            <a href="{% url 'clock:delete' pk=clock.pk %}"
+                               class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">No clocks available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% include "includes/pagination.html" %}
+{% endblock %}

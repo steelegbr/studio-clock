@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Delete Clock{% endblock %}
+{% block page_title %}Delete Clock{% endblock %}
+{% block content %}
+    <p>Are you sure you want to delete the clock "{{ object.name }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="{% url 'clock:list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+{% endblock %}
