@@ -108,7 +108,7 @@ function renderDigitalTime(canvas, boxSize, now, colour = 'red', dotRadius = 3) 
 
                 const x = startX + (characterIndex * 6 + column) * pitch;
                 const y = startY + row * pitch;
-                const glowRadius = Math.min(textDotRadius * 4, pitch * 0.45);
+                const glowRadius = Math.min(textDotRadius * 4, pitch * .8);
                 drawLed(ctx, x, y, colour, textDotRadius, 1, glowRadius);
             }
         }
