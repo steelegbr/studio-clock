@@ -80,7 +80,7 @@ function renderSeconds(canvas, boxSize, colour = 'red', dotRadius = 3, now = new
     drawLed(ctx, x, y, colour, dotRadius, secondProgress);
 }
 
-function renderDigitalTime(canvas, boxSize, now, colour = 'red', dotRadius = 3, fontScale = 1.5) {
+function renderDigitalTime(canvas, boxSize, now, colour = 'red', dotRadius = 3) {
     const ctx = canvas.getContext('2d');
     const width = canvas.width / window.devicePixelRatio;
     const height = canvas.height / window.devicePixelRatio;
@@ -90,12 +90,12 @@ function renderDigitalTime(canvas, boxSize, now, colour = 'red', dotRadius = 3, 
     const columns = time.length * 5 + time.length - 1;
     const ringSpacing = Math.min(dotRadius * 24, boxSize / 8);
     const innerRadius = boxSize / 2 - ringSpacing * 2;
-    const pitch = Math.min(dotRadius * 3 * fontScale, (innerRadius * 1.5) / columns);
+    const pitch = Math.min(dotRadius * 4.5, (innerRadius * 1.5) / columns);
     const textWidth = (columns - 1) * pitch;
     const textHeight = 6 * pitch;
     const startX = width / 2 - textWidth / 2;
     const startY = height / 2 - textHeight / 2;
-    const textDotRadius = Math.min(dotRadius * fontScale, pitch / 3);
+    const textDotRadius = Math.min(dotRadius * 1.5, pitch / 3);
 
     for (let characterIndex = 0; characterIndex < time.length; characterIndex++) {
         const glyph = LED_FONT[time[characterIndex]];
@@ -136,7 +136,7 @@ function renderLedClock() {
 
     const boxSize = Math.min(canvas.width, canvas.height) / window.devicePixelRatio;
     const now = new Date();
-    const dotRadius = 2;
+    const dotRadius = boxSize * 0.004;
     renderFives(canvas, boxSize, 'red', dotRadius);
     renderSeconds(canvas, boxSize, 'red', dotRadius, now);
     renderDigitalTime(canvas, boxSize, now, 'red', dotRadius);
