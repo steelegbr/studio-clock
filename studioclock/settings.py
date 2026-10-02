@@ -74,7 +74,9 @@ WSGI_APPLICATION = "studioclock.wsgi.application"
 
 TESTING = "test" in sys.argv
 POSTGRES_ENV_VARS = ("DB_NAME", "DB_USER", "DB_HOST")
-HAS_POSTGRES_CONFIG = all(env(var, default="") not in (None, "") for var in POSTGRES_ENV_VARS)
+HAS_POSTGRES_CONFIG = all(
+    env(var, default="") not in (None, "") for var in POSTGRES_ENV_VARS
+)
 
 if TESTING or not HAS_POSTGRES_CONFIG:
     DATABASES = {
