@@ -31,6 +31,7 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1", "[:
 # Application definition
 
 INSTALLED_APPS = [
+    "unfold",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -148,3 +149,11 @@ MAILERS = {
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+
+# Admin
+
+UNFOLD = {
+    "SITE_TITLE": "Studio Clock Admin",
+    "SITE_HEADER": "Studio Clock Admin",
+    "SITE_SUBHEADER": "Studio Clock Administration",
+}
