@@ -132,14 +132,14 @@ function syncCanvasSize(canvas) {
 function renderLedClock() {
     const canvas = document.getElementById('clockCanvas');
     syncCanvasSize(canvas);
-    clearCanvas(canvas, 'black');
+    clearCanvas(canvas, clockSettings.led_background_colour);
 
     const boxSize = Math.min(canvas.width, canvas.height) / window.devicePixelRatio;
     const now = new Date();
     const dotRadius = boxSize * 0.004;
-    renderFives(canvas, boxSize, 'red', dotRadius);
-    renderSeconds(canvas, boxSize, 'red', dotRadius, now);
-    renderDigitalTime(canvas, boxSize, now, 'red', dotRadius);
+    renderFives(canvas, boxSize, clockSettings.led_colour, dotRadius);
+    renderSeconds(canvas, boxSize, clockSettings.led_colour, dotRadius, now);
+    renderDigitalTime(canvas, boxSize, now, clockSettings.led_colour, dotRadius);
 
     requestAnimationFrame(renderLedClock);
 }

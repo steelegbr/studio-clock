@@ -1,3 +1,4 @@
+from colorfield.forms import ColorField
 from django.forms import ModelForm, Select, Textarea, TextInput
 
 from studioclock.models import Clock
@@ -6,9 +7,17 @@ from studioclock.models import Clock
 class ClockForm(ModelForm):
     class Meta:
         model = Clock
-        fields = ["name", "description", "clock_type"]
+        fields = [
+            "name",
+            "description",
+            "clock_type",
+            "led_colour",
+            "led_background_colour",
+        ]
         widgets = {
             "name": TextInput(attrs={"class": "form-control"}),
             "description": Textarea(attrs={"class": "form-control"}),
             "clock_type": Select(attrs={"class": "form-select"}),
+            "led_colour": ColorField(),
+            "led_background_colour": ColorField(),
         }

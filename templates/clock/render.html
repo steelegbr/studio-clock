@@ -16,8 +16,8 @@
                 crossorigin="anonymous"></script>
     </head>
     <body class="bg-light">
-      {{ clock_json|json_script:"clock-settings" }}
-      <canvas id="clockCanvas" class="w-100 h-100"></canvas>
-      <script src="{% static 'studioclock/clock.js' %}"></script>
+        {{ clock_json|json_script:"clock-settings" }}
+        <canvas id="clockCanvas" class="w-100 h-100"></canvas>
+        <script src="{% static 'studioclock/clock.js' %}"></script>
     </body>
 </html>
