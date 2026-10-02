@@ -4,4 +4,12 @@ version = "0.1.0"
 description = "A studio clock for broadcast radio."
 readme = "README.md"
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "django>=6.1.1",
+]
+
+[dependency-groups]
+dev = [
+    "djlint>=1.46.4",
+    "ruff>=0.16.10",
+]
