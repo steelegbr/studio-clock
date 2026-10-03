@@ -25,6 +25,7 @@ class ClockForm(ModelForm):
             "sweeping_hour_hand_colour": "Sweeping hour hand colour",
             "sweeping_minute_hand_colour": "Sweeping minute hand colour",
             "sweeping_second_hand_colour": "Sweeping second hand colour",
+            "sweeping_stroke_colour": "Sweeping stroke colour",
         }
         widgets = {
             "name": TextInput(attrs={"class": "form-control"}),
@@ -36,4 +37,5 @@ class ClockForm(ModelForm):
             "sweeping_hour_hand_colour": ColorWidget(),
             "sweeping_minute_hand_colour": ColorWidget(),
             "sweeping_second_hand_colour": ColorWidget(),
+            "sweeping_stroke_colour": ColorWidget(),
         }

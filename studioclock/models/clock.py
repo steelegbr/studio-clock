@@ -19,6 +19,7 @@ class Clock(Model):
     sweeping_hour_hand_colour = ColorField(default="#000000", blank=False, null=False)
     sweeping_minute_hand_colour = ColorField(default="#000000", blank=False, null=False)
     sweeping_second_hand_colour = ColorField(default="#FF0000", blank=False, null=False)
+    sweeping_stroke_colour = ColorField(default="#000000", blank=False, null=False)
 
     class Meta:
         ordering = ["name"]

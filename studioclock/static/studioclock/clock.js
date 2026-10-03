@@ -3,8 +3,11 @@ function clearCanvas(canvas, backgroundColour) {
     const width = canvas.width / window.devicePixelRatio;
     const height = canvas.height / window.devicePixelRatio;
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = backgroundColour;
-    ctx.fillRect(0, 0, width, height);
+
+    if (backgroundColour) {
+        ctx.fillStyle = backgroundColour;
+        ctx.fillRect(0, 0, width, height);
+    }
 }
 
 const LED_FONT = {
@@ -144,10 +147,115 @@ function renderLedClock() {
     requestAnimationFrame(renderLedClock);
 }
 
+function renderSweepingStrokes(canvas, boxSize) {
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width / window.devicePixelRatio;
+    const height = canvas.height / window.devicePixelRatio;
+    const ringSpacing = boxSize / 12;
+    const radius = boxSize / 2 - ringSpacing;
+
+    for (let i = 0; i < 60; i++) {
+        const isHourMark = i % 5 === 0;
+        const angle = (i * 6 - 90) * Math.PI / 180;
+        const x1 = (width / 2) + radius * Math.cos(angle);
+        const y1 = (height / 2) + radius * Math.sin(angle);
+        const tickLength = isHourMark ? ringSpacing * 0.5 : ringSpacing * 0.22;
+        const x2 = (width / 2) + (radius - tickLength) * Math.cos(angle);
+        const y2 = (height / 2) + (radius - tickLength) * Math.sin(angle);
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.lineWidth = isHourMark ? 2 : 1;
+        ctx.strokeStyle = clockSettings.sweeping_stroke_colour;
+        ctx.stroke();
+    }
+}
+
+function renderSweepingClockFace(canvas, boxSize) {
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width / window.devicePixelRatio;
+    const height = canvas.height / window.devicePixelRatio;
+    
+    ctx.beginPath();
+    ctx.arc(width / 2, height / 2, boxSize * .45, 0, 2 * Math.PI);
+    ctx.fillStyle = clockSettings.sweeping_background_colour;
+    ctx.fill();
+}
+
+function renderSweepingClockHands(canvas, boxSize, now) {
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width / window.devicePixelRatio;
+    const height = canvas.height / window.devicePixelRatio;
+    const ringSpacing = boxSize / 10;
+    const radius = boxSize / 2 - ringSpacing;
+
+    const hour = now.getHours() % 12 + now.getMinutes() / 60;
+    const minute = now.getMinutes() + now.getSeconds() / 60;
+    const second = now.getSeconds() + now.getMilliseconds() / 1000;
+
+    const hourAngle = (hour * 30 - 90) * Math.PI / 180; // Convert degrees to radians
+    const minuteAngle = (minute * 6 - 90) * Math.PI / 180; // Convert degrees to radians
+    const secondAngle = (second * 6 - 90) * Math.PI / 180; // Convert degrees to radians
+
+    // Hour hand
+    const hourX = (width / 2) + (radius * 0.5) * Math.cos(hourAngle);
+    const hourY = (height / 2) + (radius * 0.5) * Math.sin(hourAngle);
+    ctx.beginPath();
+    ctx.moveTo(width / 2, height / 2);
+    ctx.lineTo(hourX, hourY);
+    ctx.lineWidth = 12;
+    ctx.strokeStyle = clockSettings.sweeping_hour_hand_colour;
+    ctx.stroke();
+
+    // Minute hand
+    const minuteX = (width / 2) + (radius * 0.75) * Math.cos(minuteAngle);
+    const minuteY = (height / 2) + (radius * 0.75) * Math.sin(minuteAngle);
+    ctx.beginPath();
+    ctx.moveTo(width / 2, height / 2);
+    ctx.lineTo(minuteX, minuteY);
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = clockSettings.sweeping_minute_hand_colour;
+    ctx.stroke();
+
+    // Second hand
+    const secondX = (width / 2) + radius * Math.cos(secondAngle);
+    const secondY = (height / 2) + radius * Math.sin(secondAngle);
+    const secondTailX = (width / 2) - (radius * 0.12) * Math.cos(secondAngle);
+    const secondTailY = (height / 2) - (radius * 0.12) * Math.sin(secondAngle);
+    ctx.beginPath();
+    ctx.moveTo(secondTailX, secondTailY);
+    ctx.lineTo(secondX, secondY);
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = clockSettings.sweeping_second_hand_colour;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(width / 2, height / 2, ringSpacing * 0.18, 0, 2 * Math.PI);
+    ctx.fillStyle = clockSettings.sweeping_second_hand_colour;
+    ctx.fill();
+}
+
+function renderSweepingClock() {
+    const canvas = document.getElementById('clockCanvas');
+    syncCanvasSize(canvas);
+    clearCanvas(canvas, null);
+
+    const boxSize = Math.min(canvas.width, canvas.height) / window.devicePixelRatio;
+    renderSweepingClockFace(canvas, boxSize);
+    renderSweepingStrokes(canvas, boxSize);
+    renderSweepingClockHands(canvas, boxSize, new Date());
+
+    requestAnimationFrame(renderSweepingClock);
+}
+
 const clockSettings = JSON.parse(document.getElementById('clock-settings').textContent);
 switch (clockSettings.clock_type) {
     case 'LED':
         requestAnimationFrame(renderLedClock);
+        break;
+    case 'SWEEPING':
+        requestAnimationFrame(renderSweepingClock);
         break;
     default:
         console.error('Unknown clock type:', clockSettings.clock_type);
