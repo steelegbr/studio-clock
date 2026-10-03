@@ -15,6 +15,10 @@ class Clock(Model):
     clock_type = TextField(choices=ClockType.choices, default=ClockType.LED)
     led_colour = ColorField(default="#FF0000", blank=False, null=False)
     led_background_colour = ColorField(default="#000000", blank=False, null=False)
+    sweeping_background_colour = ColorField(default="#FFFFFF", blank=False, null=False)
+    sweeping_hour_hand_colour = ColorField(default="#000000", blank=False, null=False)
+    sweeping_minute_hand_colour = ColorField(default="#000000", blank=False, null=False)
+    sweeping_second_hand_colour = ColorField(default="#FF0000", blank=False, null=False)
 
     class Meta:
         ordering = ["name"]
