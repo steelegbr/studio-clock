@@ -10,5 +10,5 @@ class ClockRenderView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["clock_json"] = model_to_dict(self.object)
+        context["clock_json"] = model_to_dict(self.object, exclude=["id", "logo"])
         return context
