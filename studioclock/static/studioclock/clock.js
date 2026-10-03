@@ -40,7 +40,7 @@ function drawLed(ctx, x, y, colour, dotRadius, opacity = 1, glowRadius = dotRadi
     ctx.globalAlpha = 1;
 }
 
-function renderFives(canvas, boxSize, colour = 'red', dotRadius = 3) {
+function renderLedFives(canvas, boxSize, colour = 'red', dotRadius = 3) {
     const ctx = canvas.getContext('2d');
     const width = canvas.width / window.devicePixelRatio;
     const height = canvas.height / window.devicePixelRatio;
@@ -56,7 +56,7 @@ function renderFives(canvas, boxSize, colour = 'red', dotRadius = 3) {
     }
 }
 
-function renderSeconds(canvas, boxSize, colour = 'red', dotRadius = 3, now = new Date()) {
+function renderLedSeconds(canvas, boxSize, colour = 'red', dotRadius = 3, now = new Date()) {
     const ctx = canvas.getContext('2d');
     const seconds = now.getSeconds();
     const secondProgress = now.getMilliseconds() / 1000;
@@ -137,8 +137,8 @@ function renderLedClock() {
     const boxSize = Math.min(canvas.width, canvas.height) / window.devicePixelRatio;
     const now = new Date();
     const dotRadius = boxSize * 0.004;
-    renderFives(canvas, boxSize, clockSettings.led_colour, dotRadius);
-    renderSeconds(canvas, boxSize, clockSettings.led_colour, dotRadius, now);
+    renderLedFives(canvas, boxSize, clockSettings.led_colour, dotRadius);
+    renderLedSeconds(canvas, boxSize, clockSettings.led_colour, dotRadius, now);
     renderDigitalTime(canvas, boxSize, now, clockSettings.led_colour, dotRadius);
 
     requestAnimationFrame(renderLedClock);
