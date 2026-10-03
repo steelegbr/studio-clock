@@ -1,0 +1,93 @@
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+.studio-clock {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+
+    overflow: hidden;
+}
+
+.clock-main {
+    min-height: 0;
+    min-width: 0;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 1rem;
+
+    padding: 1rem;
+}
+
+.clock-primary {
+    min-height: 0;
+    min-width: 0;
+
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 1rem;
+}
+
+.clock-canvas {
+    min-height: 0;
+    min-width: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.clock-canvas canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.clock-time {
+    text-align: center;
+    font-size: clamp(2rem, 3vw, 3rem);
+}
+
+.clock-secondary {
+    min-height: 0;
+    min-width: 0;
+
+    display: grid;
+    grid-template-rows:
+        minmax(0, 0.8fr)
+        minmax(0, 1.1fr)
+        minmax(0, 1.1fr);
+
+    gap: 1rem;
+}
+
+.clock-branding,
+.clock-weather,
+.clock-now-playing {
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.clock-status {
+    min-height: 0;
+    padding: 0.5rem 1rem;
+}
+
+.status-lamps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
