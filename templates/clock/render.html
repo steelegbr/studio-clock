@@ -18,7 +18,9 @@
     </head>
     <body>
         {{ clock_json|json_script:"clock-settings" }}
-        <div class="studio-clock">
+        <div class="studio-clock"
+             style="background-color: {{ object.background_colour }};
+                    color: {{ object.foreground_colour }}">
             <main class="clock-main">
                 <section class="clock-primary">
                     <div class="clock-canvas">
@@ -29,7 +31,15 @@
                     </div>
                 </section>
                 <aside class="clock-secondary">
-                    <div class="clock-branding">Branding</div>
+                    <div class="clock-branding">
+                        {% if object.logo %}
+                            <img class="clock-branding-logo"
+                                 src="{{ object.logo.url }}"
+                                 alt="{{ object.name }}">
+                        {% else %}
+                            <span class="clock-branding-name">{{ object.name }}</span>
+                        {% endif %}
+                    </div>
                     <div class="clock-weather">Weather</div>
                     <div class="clock-now-playing">Now Playing</div>
                 </aside>
