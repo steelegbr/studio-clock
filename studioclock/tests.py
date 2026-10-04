@@ -55,9 +55,9 @@ class ClockRenderTests(TestCase):
 
         response = self.client.get(reverse("clock:render", args=[clock.pk]))
 
-        self.assertContains(
-            response,
-            'style="background-color: #123456; color: #ABCDEF;"',
+        self.assertRegex(
+            response.content.decode(),
+            r'style="background-color: #123456;\s*color: #ABCDEF"',
         )
         self.assertContains(
             response,
