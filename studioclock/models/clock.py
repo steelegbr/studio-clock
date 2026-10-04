@@ -1,7 +1,7 @@
 from uuid import uuid4
 
 from colorfield.fields import ColorField
-from django.db.models import Model, TextChoices, TextField, UUIDField
+from django.db.models import ImageField, Model, TextChoices, TextField, UUIDField
 
 
 class Clock(Model):
@@ -20,6 +20,9 @@ class Clock(Model):
     sweeping_minute_hand_colour = ColorField(default="#000000", blank=False, null=False)
     sweeping_second_hand_colour = ColorField(default="#FF0000", blank=False, null=False)
     sweeping_stroke_colour = ColorField(default="#000000", blank=False, null=False)
+    logo = ImageField(upload_to="logos/", blank=True, null=True)
+    background_colour = ColorField(default="#FFFFFF", blank=False, null=False)
+    foreground_colour = ColorField(default="#000000", blank=False, null=False)
 
     class Meta:
         ordering = ["name"]

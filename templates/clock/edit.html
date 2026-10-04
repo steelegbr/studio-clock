@@ -2,7 +2,7 @@
 {% block title %}Edit Clock{% endblock %}
 {% block page_title %}Edit Clock{% endblock %}
 {% block content %}
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% for field in form %}
             {% include "includes/form_field.html" with field=field %}

@@ -1,5 +1,5 @@
 from colorfield.widgets import ColorWidget
-from django.forms import ModelForm, Select, Textarea, TextInput
+from django.forms import FileInput, ModelForm, Select, Textarea, TextInput
 
 from studioclock.models import Clock
 
@@ -17,6 +17,9 @@ class ClockForm(ModelForm):
             "sweeping_hour_hand_colour",
             "sweeping_minute_hand_colour",
             "sweeping_second_hand_colour",
+            "logo",
+            "background_colour",
+            "foreground_colour",
         ]
         labels = {
             "led_colour": "LED colour",
@@ -38,4 +41,7 @@ class ClockForm(ModelForm):
             "sweeping_minute_hand_colour": ColorWidget(),
             "sweeping_second_hand_colour": ColorWidget(),
             "sweeping_stroke_colour": ColorWidget(),
+            "logo": FileInput(attrs={"class": "form-control"}),
+            "background_colour": ColorWidget(),
+            "foreground_colour": ColorWidget(),
         }

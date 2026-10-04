@@ -133,7 +133,7 @@ function syncCanvasSize(canvas) {
 }
 
 function renderLedClock() {
-    const canvas = document.getElementById('clockCanvas');
+    const canvas = document.getElementById('clock-canvas');
     syncCanvasSize(canvas);
     clearCanvas(canvas, clockSettings.led_background_colour);
 
@@ -237,7 +237,7 @@ function renderSweepingClockHands(canvas, boxSize, now) {
 }
 
 function renderSweepingClock() {
-    const canvas = document.getElementById('clockCanvas');
+    const canvas = document.getElementById('clock-canvas');
     syncCanvasSize(canvas);
     clearCanvas(canvas, null);
 
@@ -249,7 +249,68 @@ function renderSweepingClock() {
     requestAnimationFrame(renderSweepingClock);
 }
 
+const TIME_NUMBER_WORDS = [
+    'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+    'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
+    'seventeen', 'eighteen', 'nineteen',
+];
+const TIME_HOUR_WORDS = [
+    'twelve', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight',
+    'nine', 'ten', 'eleven',
+];
+
+function numberToWords(number) {
+    if (number < 20) {
+        return TIME_NUMBER_WORDS[number];
+    }
+
+    const remainder = number % 10;
+    return `twenty${remainder ? ` ${TIME_NUMBER_WORDS[remainder]}` : ''}`;
+}
+
+function getSpokenTime(now) {
+    const minutes = now.getMinutes();
+    const hour = TIME_HOUR_WORDS[now.getHours() % 12];
+    const nextHour = TIME_HOUR_WORDS[(now.getHours() + 1) % 12];
+
+    if (minutes === 0) {
+        return `${hour[0].toUpperCase()}${hour.slice(1)} o'clock`;
+    }
+    if (minutes === 15) {
+        return `Quarter past ${hour}`;
+    }
+    if (minutes === 30) {
+        return `Half past ${hour}`;
+    }
+    if (minutes === 45) {
+        return `Quarter to ${nextHour}`;
+    }
+
+    const isPast = minutes < 30;
+    const minuteCount = isPast ? minutes : 60 - minutes;
+    const minuteUnit = minuteCount === 1 ? 'minute' : 'minutes';
+    const direction = isPast ? 'past' : 'to';
+    const targetHour = isPast ? hour : nextHour;
+    const minuteWords = numberToWords(minuteCount);
+
+    return `${minuteWords[0].toUpperCase()}${minuteWords.slice(1)} ${minuteUnit} ${direction} ${targetHour}`;
+}
+
+function renderTimeText() {
+    const timeDisplay = document.getElementById('time-display');
+    if (!timeDisplay) {
+        return;
+    }
+
+    const now = new Date();
+    timeDisplay.textContent = getSpokenTime(now);
+    const millisecondsUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+    window.setTimeout(renderTimeText, millisecondsUntilNextMinute);
+}
+
 const clockSettings = JSON.parse(document.getElementById('clock-settings').textContent);
+renderTimeText();
+
 switch (clockSettings.clock_type) {
     case 'LED':
         requestAnimationFrame(renderLedClock);

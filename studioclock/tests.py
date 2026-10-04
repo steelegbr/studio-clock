@@ -43,3 +43,54 @@ class ClockPermissionTests(TestCase):
                 response = self.client.get(url)
                 self.assertEqual(response.status_code, 200)
                 self.user.user_permissions.clear()
+
+
+class ClockRenderTests(TestCase):
+    def test_render_uses_clock_colours_and_name_without_logo(self):
+        clock = Clock.objects.create(
+            name="Studio Clock",
+            background_colour="#123456",
+            foreground_colour="#ABCDEF",
+        )
+
+        response = self.client.get(reverse("clock:render", args=[clock.pk]))
+
+        self.assertRegex(
+            response.content.decode(),
+            r'style="background-color: #123456;\s*color: #ABCDEF"',
+        )
+        self.assertContains(
+            response,
+            '<span class="clock-branding-name">Studio Clock</span>',
+            html=True,
+        )
+        self.assertNotContains(response, "clock-branding-logo")
+
+    def test_render_displays_clock_logo_when_present(self):
+        clock = Clock.objects.create(name="Studio Clock")
+        Clock.objects.filter(pk=clock.pk).update(logo="logos/studio-clock.png")
+
+        response = self.client.get(reverse("clock:render", args=[clock.pk]))
+
+        self.assertContains(response, 'class="clock-branding-logo"')
+        self.assertNotContains(response, "clock-branding-name")
+
+
+class ClockUploadFormTests(TestCase):
+    def test_create_and_edit_forms_use_multipart_encoding(self):
+        user = User.objects.create_superuser(
+            username="clock-admin",
+            password="password",
+        )
+        self.client.force_login(user)
+        clock = Clock.objects.create(name="Studio Clock")
+
+        for url in (
+            reverse("clock:create"),
+            reverse("clock:edit", args=[clock.pk]),
+        ):
+            with self.subTest(url=url):
+                self.assertContains(
+                    self.client.get(url),
+                    'enctype="multipart/form-data"',
+                )
