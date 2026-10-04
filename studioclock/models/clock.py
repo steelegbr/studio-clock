@@ -1,7 +1,15 @@
 from uuid import uuid4
 
 from colorfield.fields import ColorField
-from django.db.models import ImageField, Model, TextChoices, TextField, UUIDField
+from django.db.models import (
+    CASCADE,
+    ForeignKey,
+    ImageField,
+    Model,
+    TextChoices,
+    TextField,
+    UUIDField,
+)
 
 
 class Clock(Model):
@@ -23,6 +31,7 @@ class Clock(Model):
     logo = ImageField(upload_to="logos/", blank=True, null=True)
     background_colour = ColorField(default="#FFFFFF", blank=False, null=False)
     foreground_colour = ColorField(default="#000000", blank=False, null=False)
+    font = ForeignKey("FontWeight", on_delete=CASCADE, blank=True, null=True)
 
     class Meta:
         ordering = ["name"]
