@@ -20,6 +20,7 @@ class ClockForm(ModelForm):
             "logo",
             "background_colour",
             "foreground_colour",
+            "font",
         ]
         labels = {
             "led_colour": "LED colour",
@@ -44,4 +45,5 @@ class ClockForm(ModelForm):
             "logo": FileInput(attrs={"class": "form-control"}),
             "background_colour": ColorWidget(),
             "foreground_colour": ColorWidget(),
+            "font": Select(attrs={"class": "form-select"}),
         }
