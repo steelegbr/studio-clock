@@ -44,4 +44,4 @@ class FontWeight(Model):
         verbose_name_plural = "Font Weights"
 
     def __str__(self):
-        return f"{self.font.name} ({self.weight})"
+        return f"{self.font.name} ({self.weight}) [{self.font.category}]"

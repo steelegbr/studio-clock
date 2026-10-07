@@ -2,7 +2,7 @@ from django.contrib.auth.models import Permission, User
 from django.test import TestCase
 from django.urls import reverse
 
-from studioclock.models import Clock
+from studioclock.models import Clock, Font, FontWeight
 
 
 class ClockPermissionTests(TestCase):
@@ -65,6 +65,22 @@ class ClockRenderTests(TestCase):
             html=True,
         )
         self.assertNotContains(response, "clock-branding-logo")
+
+    def test_render_loads_and_applies_selected_font_and_weight(self):
+        font = Font.objects.create(name="Share Tech Mono", family="Share Tech Mono")
+        weight = FontWeight.objects.create(font=font, weight=700, name="Bold")
+        clock = Clock.objects.create(name="Studio Clock", font=weight)
+
+        response = self.client.get(reverse("clock:render", args=[clock.pk]))
+
+        self.assertContains(
+            response,
+            "https://fonts.googleapis.com/css2?family=Share%20Tech%20Mono:wght@700&display=swap",
+        )
+        self.assertRegex(
+            response.content.decode(),
+            r"font-family: 'Share Tech Mono';\s*font-weight: 700",
+        )
 
     def test_render_displays_clock_logo_when_present(self):
         clock = Clock.objects.create(name="Studio Clock")
