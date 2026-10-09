@@ -308,8 +308,79 @@ function renderTimeText() {
     window.setTimeout(renderTimeText, millisecondsUntilNextMinute);
 }
 
+function updateNowPlaying(data) {
+    const widget = document.querySelector('.clock-now-playing');
+    if (!widget) {
+        return;
+    }
+
+    widget.replaceChildren();
+    if (!data.is_playing) {
+        const idleMessage = document.createElement('div');
+        idleMessage.className = 'now-playing-idle';
+        idleMessage.textContent = 'Nothing playing';
+        widget.append(idleMessage);
+        return;
+    }
+
+    if (data.artwork_url) {
+        const artwork = document.createElement('img');
+        artwork.className = 'now-playing-artwork';
+        artwork.src = data.artwork_url;
+        artwork.alt = `Cover art for ${data.title} by ${data.artist}`;
+        widget.append(artwork);
+    } else {
+        const placeholder = document.createElement('div');
+        placeholder.className = 'now-playing-artwork now-playing-artwork-placeholder';
+        placeholder.setAttribute('aria-hidden', 'true');
+        const icon = document.createElement('i');
+        icon.className = 'bi bi-disc';
+        placeholder.append(icon);
+        widget.append(placeholder);
+    }
+
+    const details = document.createElement('div');
+    details.className = 'now-playing-details';
+    const label = document.createElement('div');
+    label.className = 'now-playing-label';
+    label.textContent = 'NOW PLAYING';
+    const title = document.createElement('div');
+    title.className = 'now-playing-title';
+    title.textContent = data.title;
+    const artist = document.createElement('div');
+    artist.className = 'now-playing-artist';
+    artist.textContent = data.artist;
+    details.append(label, title, artist);
+    widget.append(details);
+}
+
+async function pollNowPlaying() {
+    const widget = document.querySelector('.clock-now-playing[data-status-url]');
+    if (!widget) {
+        return;
+    }
+
+    let interval = 30_000;
+    try {
+        const response = await fetch(widget.dataset.statusUrl, {
+            headers: { Accept: 'application/json' },
+            cache: 'no-store',
+        });
+        if (!response.ok) {
+            throw new Error(`Now playing request failed: ${response.status}`);
+        }
+        const data = await response.json();
+        updateNowPlaying(data);
+        interval = Math.max(5, data.poll_interval_seconds) * 1000;
+    } catch (error) {
+        console.error('Unable to update now playing display', error);
+    }
+    window.setTimeout(pollNowPlaying, interval);
+}
+
 const clockSettings = JSON.parse(document.getElementById('clock-settings').textContent);
 renderTimeText();
+pollNowPlaying();
 
 switch (clockSettings.clock_type) {
     case 'LED':

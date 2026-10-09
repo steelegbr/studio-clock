@@ -80,6 +80,68 @@ html, body {
     overflow: hidden;
 }
 
+.clock-now-playing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.75rem, 2vw, 1.5rem);
+    padding: clamp(0.75rem, 2vw, 1.5rem);
+    text-align: left;
+}
+
+.now-playing-artwork {
+    width: clamp(4rem, 28%, 10rem);
+    aspect-ratio: 1;
+    flex: 0 0 auto;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+
+.now-playing-artwork-placeholder {
+    display: grid;
+    place-items: center;
+    background: rgb(127 127 127 / 20%);
+    font-size: clamp(2rem, 6vw, 4rem);
+}
+
+.now-playing-details {
+    min-width: 0;
+}
+
+.now-playing-label {
+    margin-bottom: 0.4rem;
+    font-size: clamp(0.7rem, 1vw, 0.9rem);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    opacity: 0.7;
+}
+
+.now-playing-title,
+.now-playing-artist {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow-wrap: anywhere;
+}
+
+.now-playing-title {
+    font-size: clamp(1.1rem, 2vw, 2rem);
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.now-playing-artist {
+    margin-top: 0.4rem;
+    font-size: clamp(0.9rem, 1.4vw, 1.25rem);
+    opacity: 0.8;
+}
+
+.now-playing-idle {
+    font-size: clamp(1rem, 1.5vw, 1.4rem);
+    opacity: 0.7;
+}
+
 .clock-branding {
     display: flex;
     align-items: center;

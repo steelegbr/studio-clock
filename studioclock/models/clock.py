@@ -3,6 +3,7 @@ from uuid import uuid4
 from colorfield.fields import ColorField
 from django.db.models import (
     CASCADE,
+    SET_NULL,
     ForeignKey,
     ImageField,
     Model,
@@ -32,6 +33,13 @@ class Clock(Model):
     background_colour = ColorField(default="#FFFFFF", blank=False, null=False)
     foreground_colour = ColorField(default="#000000", blank=False, null=False)
     font = ForeignKey("FontWeight", on_delete=CASCADE, blank=True, null=True)
+    now_playing_source = ForeignKey(
+        "NowPlayingSource",
+        on_delete=SET_NULL,
+        blank=True,
+        null=True,
+        related_name="clocks",
+    )
 
     class Meta:
         ordering = ["name"]

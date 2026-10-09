@@ -1,8 +1,12 @@
+from datetime import timedelta
+from unittest.mock import patch
+
 from django.contrib.auth.models import Permission, User
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
-from studioclock.models import Clock, Font, FontWeight
+from studioclock.models import Clock, Font, FontWeight, NowPlayingSource
 
 
 class ClockPermissionTests(TestCase):
@@ -90,6 +94,87 @@ class ClockRenderTests(TestCase):
 
         self.assertContains(response, 'class="clock-branding-logo"')
         self.assertNotContains(response, "clock-branding-name")
+
+    @patch(
+        "studioclock.services.now_playing._lookup_artwork",
+        return_value="https://art.example/cover.jpg",
+    )
+    @patch(
+        "studioclock.services.now_playing._fetch_json",
+        return_value={
+            "isPlayingASong": True,
+            "song": {"artist": "Bon Jovi", "title": "Livin' on a Prayer"},
+        },
+    )
+    def test_render_displays_cached_now_playing_song_and_artwork(
+        self, fetch_json, lookup_artwork
+    ):
+        source = NowPlayingSource.objects.create(
+            name="Test Radio",
+            endpoint_url="https://radio.example/nowplaying",
+        )
+        clock = Clock.objects.create(name="Studio Clock", now_playing_source=source)
+
+        response = self.client.get(reverse("clock:render", args=[clock.pk]))
+
+        self.assertContains(response, "Bon Jovi")
+        self.assertContains(response, "Livin&#x27; on a Prayer")
+        self.assertContains(response, 'src="https://art.example/cover.jpg"')
+        fetch_json.assert_called_once_with(source.endpoint_url)
+        lookup_artwork.assert_called_once_with("Bon Jovi", "Livin' on a Prayer")
+
+    @patch("studioclock.services.now_playing._fetch_json")
+    def test_now_playing_is_not_polled_until_cache_expires(self, fetch_json):
+        source = NowPlayingSource.objects.create(
+            name="Test Radio",
+            endpoint_url="https://radio.example/nowplaying",
+            artist="Bon Jovi",
+            title="Livin' on a Prayer",
+            is_playing=True,
+            last_polled_at=timezone.now() - timedelta(seconds=10),
+        )
+        clock = Clock.objects.create(name="Studio Clock", now_playing_source=source)
+
+        response = self.client.get(reverse("clock:render", args=[clock.pk]))
+
+        self.assertContains(response, "Bon Jovi")
+        fetch_json.assert_not_called()
+
+    @patch(
+        "studioclock.services.now_playing._lookup_artwork",
+        return_value="https://art.example/cover.jpg",
+    )
+    @patch(
+        "studioclock.services.now_playing._fetch_json",
+        return_value={
+            "isPlayingASong": True,
+            "song": {"artist": "Bon Jovi", "title": "Livin' on a Prayer"},
+        },
+    )
+    def test_now_playing_status_endpoint_returns_source_data(
+        self, fetch_json, lookup_artwork
+    ):
+        source = NowPlayingSource.objects.create(
+            name="Test Radio",
+            endpoint_url="https://radio.example/nowplaying",
+        )
+        clock = Clock.objects.create(name="Studio Clock", now_playing_source=source)
+
+        response = self.client.get(reverse("clock:now-playing", args=[clock.pk]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json(),
+            {
+                "is_playing": True,
+                "artist": "Bon Jovi",
+                "title": "Livin' on a Prayer",
+                "artwork_url": "https://art.example/cover.jpg",
+                "poll_interval_seconds": 30,
+            },
+        )
+        fetch_json.assert_called_once_with(source.endpoint_url)
+        lookup_artwork.assert_called_once_with("Bon Jovi", "Livin' on a Prayer")
 
 
 class ClockUploadFormTests(TestCase):
