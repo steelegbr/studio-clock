@@ -1,7 +1,7 @@
 from colorfield.widgets import ColorWidget
 from django.forms import FileInput, ModelForm, Select, Textarea, TextInput
 
-from studioclock.models import Clock
+from studioclock.models import Clock, NowPlayingSource
 
 
 class ClockForm(ModelForm):
@@ -21,6 +21,7 @@ class ClockForm(ModelForm):
             "background_colour",
             "foreground_colour",
             "font",
+            "now_playing_source",
         ]
         labels = {
             "led_colour": "LED colour",
@@ -46,4 +47,12 @@ class ClockForm(ModelForm):
             "background_colour": ColorWidget(),
             "foreground_colour": ColorWidget(),
             "font": Select(attrs={"class": "form-select"}),
+            "now_playing_source": Select(attrs={"class": "form-select"}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.instance.pk:
+            self.fields["now_playing_source"].initial = NowPlayingSource.objects.filter(
+                enabled=True
+            ).first()

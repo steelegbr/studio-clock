@@ -49,7 +49,29 @@
                         {% endif %}
                     </div>
                     <div class="clock-weather">Weather</div>
-                    <div class="clock-now-playing">Now Playing</div>
+                    <section class="clock-now-playing"
+                             aria-label="Now playing"
+                             {% if object.now_playing_source %}data-status-url="{% url 'clock:now-playing' object.pk %}"{% endif %}>
+                        {% if now_playing and now_playing.is_playing %}
+                            {% if now_playing.artwork_url %}
+                                <img class="now-playing-artwork"
+                                     src="{{ now_playing.artwork_url }}"
+                                     alt="Cover art for {{ now_playing.title }} by {{ now_playing.artist }}">
+                            {% else %}
+                                <div class="now-playing-artwork now-playing-artwork-placeholder"
+                                     aria-hidden="true">
+                                    <i class="bi bi-disc"></i>
+                                </div>
+                            {% endif %}
+                            <div class="now-playing-details">
+                                <div class="now-playing-label">NOW PLAYING</div>
+                                <div class="now-playing-title">{{ now_playing.title }}</div>
+                                <div class="now-playing-artist">{{ now_playing.artist }}</div>
+                            </div>
+                        {% else %}
+                            <div class="now-playing-idle">Nothing playing</div>
+                        {% endif %}
+                    </section>
                 </aside>
             </main>
             <footer class="clock-status">
