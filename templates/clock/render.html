@@ -48,7 +48,39 @@
                             <span class="clock-branding-name">{{ object.name }}</span>
                         {% endif %}
                     </div>
-                    <div class="clock-weather">Weather</div>
+                    <section class="clock-weather"
+                             id="clock-weather"
+                             aria-label="Weather forecast"
+                             {% if object.weather_location %}data-status-url="{% url 'clock:weather' object.pk %}"{% endif %}>
+                        {% if weather.available %}
+                            <div class="weather-heading">
+                                <div class="weather-title">WEATHER</div>
+                                <div class="weather-location">{{ weather.location }}</div>
+                            </div>
+                            <div class="weather-days">
+                                {% for day in weather.days %}
+                                    <article class="weather-day">
+                                        <div class="weather-day-label">{{ day.label }}</div>
+                                        <i class="weather-icon bi {{ day.icon }}" aria-hidden="true"></i>
+                                        <div class="weather-condition">{{ day.condition }}</div>
+                                        <div class="weather-temperatures">
+                                            <span class="weather-high">H {{ day.high|floatformat:0 }}{{ weather.unit }}</span>
+                                            <span class="weather-low">L {{ day.low|floatformat:0 }}{{ weather.unit }}</span>
+                                        </div>
+                                    </article>
+                                {% endfor %}
+                            </div>
+                            <div class="weather-attribution">
+                                Weather data by <a href="https://open-meteo.com/"
+    target="_blank"
+    rel="noreferrer">Open-Meteo</a>
+                            </div>
+                        {% elif object.weather_location %}
+                            <div class="weather-unavailable">Weather temporarily unavailable</div>
+                        {% else %}
+                            <div class="weather-unavailable">Set a weather location in clock settings</div>
+                        {% endif %}
+                    </section>
                     <section class="clock-now-playing"
                              aria-label="Now playing"
                              {% if object.now_playing_source %}data-status-url="{% url 'clock:now-playing' object.pk %}"{% endif %}>

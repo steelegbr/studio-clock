@@ -378,9 +378,113 @@ async function pollNowPlaying() {
     window.setTimeout(pollNowPlaying, interval);
 }
 
+function updateWeather(data) {
+    const widget = document.querySelector('.clock-weather[data-status-url]');
+    if (!widget) {
+        return;
+    }
+
+    widget.replaceChildren();
+    if (!data.available) {
+        const unavailable = document.createElement('div');
+        unavailable.className = 'weather-unavailable';
+        unavailable.textContent = 'Weather temporarily unavailable';
+        widget.append(unavailable);
+        return;
+    }
+
+    const heading = document.createElement('div');
+    heading.className = 'weather-heading';
+    const title = document.createElement('div');
+    title.className = 'weather-title';
+    title.textContent = 'WEATHER';
+    const location = document.createElement('div');
+    location.className = 'weather-location';
+    location.textContent = data.location;
+    heading.append(title, location);
+
+    const days = document.createElement('div');
+    days.className = 'weather-days';
+    data.days.forEach((day) => {
+        const article = document.createElement('article');
+        article.className = 'weather-day';
+        const label = document.createElement('div');
+        label.className = 'weather-day-label';
+        label.textContent = day.label;
+        const icon = document.createElement('i');
+        icon.className = `weather-icon bi ${day.icon}`;
+        icon.setAttribute('aria-hidden', 'true');
+        const condition = document.createElement('div');
+        condition.className = 'weather-condition';
+        condition.textContent = day.condition;
+        const temperatures = document.createElement('div');
+        temperatures.className = 'weather-temperatures';
+        const high = document.createElement('span');
+        high.className = 'weather-high';
+        high.textContent = `H ${Math.round(day.high)}${data.unit}`;
+        const low = document.createElement('span');
+        low.className = 'weather-low';
+        low.textContent = `L ${Math.round(day.low)}${data.unit}`;
+        temperatures.append(high, low);
+        article.append(label, icon, condition, temperatures);
+        days.append(article);
+    });
+
+    const attribution = document.createElement('div');
+    attribution.className = 'weather-attribution';
+    attribution.append(document.createTextNode('Weather data by '));
+    const link = document.createElement('a');
+    link.href = 'https://open-meteo.com/';
+    link.target = '_blank';
+    link.rel = 'noreferrer';
+    link.textContent = 'Open-Meteo';
+    attribution.append(link);
+    widget.append(heading, days, attribution);
+}
+
+let weatherNextPollAt = Date.now() + 86_400_000;
+let weatherPollTimer;
+
+function scheduleWeatherPoll(delay) {
+    window.clearTimeout(weatherPollTimer);
+    weatherNextPollAt = Date.now() + delay;
+    weatherPollTimer = window.setTimeout(pollWeather, delay);
+}
+
+async function pollWeather() {
+    const widget = document.querySelector('.clock-weather[data-status-url]');
+    if (!widget) {
+        return;
+    }
+
+    let interval = 86_400_000;
+    try {
+        const response = await fetch(widget.dataset.statusUrl, {
+            headers: { Accept: 'application/json' },
+            cache: 'no-store',
+        });
+        if (!response.ok) {
+            throw new Error(`Weather request failed: ${response.status}`);
+        }
+        const data = await response.json();
+        updateWeather(data);
+        interval = Math.max(60, data.poll_interval_seconds) * 1000;
+    } catch (error) {
+        console.error('Unable to update weather display', error);
+    }
+    scheduleWeatherPoll(interval);
+}
+
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && Date.now() >= weatherNextPollAt) {
+        pollWeather();
+    }
+});
+
 const clockSettings = JSON.parse(document.getElementById('clock-settings').textContent);
 renderTimeText();
 pollNowPlaying();
+scheduleWeatherPoll(86_400_000);
 
 switch (clockSettings.clock_type) {
     case 'LED':
