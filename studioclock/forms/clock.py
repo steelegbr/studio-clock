@@ -22,6 +22,8 @@ class ClockForm(ModelForm):
             "foreground_colour",
             "font",
             "now_playing_source",
+            "weather_location",
+            "weather_units",
         ]
         labels = {
             "led_colour": "LED colour",
@@ -31,6 +33,8 @@ class ClockForm(ModelForm):
             "sweeping_minute_hand_colour": "Sweeping minute hand colour",
             "sweeping_second_hand_colour": "Sweeping second hand colour",
             "sweeping_stroke_colour": "Sweeping stroke colour",
+            "weather_location": "Weather location",
+            "weather_units": "Temperature units",
         }
         widgets = {
             "name": TextInput(attrs={"class": "form-control"}),
@@ -48,10 +52,20 @@ class ClockForm(ModelForm):
             "foreground_colour": ColorWidget(),
             "font": Select(attrs={"class": "form-select"}),
             "now_playing_source": Select(attrs={"class": "form-select"}),
+            "weather_location": TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "e.g. London",
+                }
+            ),
+            "weather_units": Select(attrs={"class": "form-select"}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields[
+            "weather_location"
+        ].help_text = "Enter a city or place name to show its forecast. Leave blank to hide weather."
         if not self.instance.pk:
             self.fields["now_playing_source"].initial = NowPlayingSource.objects.filter(
                 enabled=True

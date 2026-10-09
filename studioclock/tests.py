@@ -6,7 +6,9 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
+from studioclock.forms.clock import ClockForm
 from studioclock.models import Clock, Font, FontWeight, NowPlayingSource
+from studioclock.services.weather import weather_payload
 
 
 class ClockPermissionTests(TestCase):
@@ -195,3 +197,167 @@ class ClockUploadFormTests(TestCase):
                     self.client.get(url),
                     'enctype="multipart/form-data"',
                 )
+
+
+class WeatherTests(TestCase):
+    def setUp(self):
+        self.clock = Clock.objects.create(
+            name="Weather Clock",
+            weather_location="London",
+            weather_units=Clock.WeatherUnits.FAHRENHEIT,
+        )
+
+    @patch(
+        "studioclock.services.weather._fetch_json",
+        side_effect=[
+            {"results": [{"latitude": 51.5, "longitude": -0.1}]},
+            {
+                "daily": {
+                    "time": ["2026-10-09", "2026-10-10"],
+                    "weather_code": [2, 61],
+                    "temperature_2m_max": [60.8, 55.4],
+                    "temperature_2m_min": [48.2, 44.6],
+                }
+            },
+        ],
+    )
+    def test_weather_endpoint_geocodes_and_returns_two_day_forecast(self, fetch_json):
+        response = self.client.get(reverse("clock:weather", args=[self.clock.pk]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json(),
+            {
+                "available": True,
+                "location": "London",
+                "unit": "°F",
+                "days": [
+                    {
+                        "label": "Today",
+                        "date": "2026-10-09",
+                        "condition": "Partly cloudy",
+                        "icon": "bi-cloud-sun-fill",
+                        "high": 60.8,
+                        "low": 48.2,
+                    },
+                    {
+                        "label": "Tomorrow",
+                        "date": "2026-10-10",
+                        "condition": "Light rain",
+                        "icon": "bi-cloud-rain-fill",
+                        "high": 55.4,
+                        "low": 44.6,
+                    },
+                ],
+                "poll_interval_seconds": 86400,
+            },
+        )
+        self.assertEqual(fetch_json.call_count, 2)
+        self.assertIn("temperature_unit=fahrenheit", fetch_json.call_args.args[0])
+
+    @patch("studioclock.services.weather._fetch_json")
+    def test_forecast_is_cached_for_one_day(self, fetch_json):
+        self.clock.weather_latitude = 51.5
+        self.clock.weather_longitude = -0.1
+        self.clock.weather_forecast = [
+            {
+                "label": "Today",
+                "date": "2026-10-09",
+                "condition": "Clear sky",
+                "icon": "bi-sun-fill",
+                "high": 18,
+                "low": 9,
+            },
+            {
+                "label": "Tomorrow",
+                "date": "2026-10-10",
+                "condition": "Overcast",
+                "icon": "bi-cloud-fill",
+                "high": 15,
+                "low": 8,
+            },
+        ]
+        self.clock.weather_last_polled_at = timezone.now() - timedelta(hours=12)
+        self.clock.save()
+
+        payload = weather_payload(self.clock)
+
+        self.assertTrue(payload["available"])
+        self.assertEqual(payload["days"][0]["condition"], "Clear sky")
+        fetch_json.assert_not_called()
+
+    def test_location_and_units_are_configurable_on_clock_form(self):
+        form = ClockForm()
+
+        self.assertIn("weather_location", form.fields)
+        self.assertIn("weather_units", form.fields)
+        self.assertEqual(
+            form.fields["weather_units"].choices,
+            list(Clock.WeatherUnits.choices),
+        )
+
+    def test_changing_location_clears_cached_forecast_and_coordinates(self):
+        self.clock.weather_latitude = 51.5
+        self.clock.weather_longitude = -0.1
+        self.clock.weather_forecast = [{"label": "Today"}]
+        self.clock.weather_last_polled_at = timezone.now()
+        self.clock.save()
+
+        initial_form = ClockForm(instance=self.clock)
+        data = initial_form.initial.copy()
+        data["weather_location"] = "Edinburgh"
+        form = ClockForm(data=data, instance=self.clock)
+
+        self.assertTrue(form.is_valid(), form.errors)
+        clock = form.save()
+
+        self.assertIsNone(clock.weather_latitude)
+        self.assertIsNone(clock.weather_longitude)
+        self.assertEqual(clock.weather_forecast, [])
+        self.assertIsNone(clock.weather_last_polled_at)
+
+    def test_changing_units_with_update_fields_clears_cached_forecast(self):
+        self.clock.weather_latitude = 51.5
+        self.clock.weather_longitude = -0.1
+        self.clock.weather_forecast = [{"label": "Today"}]
+        self.clock.weather_last_polled_at = timezone.now()
+        self.clock.save()
+
+        self.clock.weather_units = Clock.WeatherUnits.CELSIUS
+        self.clock.save(update_fields=["weather_units"])
+        self.clock.refresh_from_db()
+
+        self.assertEqual(self.clock.weather_units, Clock.WeatherUnits.CELSIUS)
+        self.assertIsNone(self.clock.weather_latitude)
+        self.assertIsNone(self.clock.weather_longitude)
+        self.assertEqual(self.clock.weather_forecast, [])
+        self.assertIsNone(self.clock.weather_last_polled_at)
+
+    def test_render_includes_cached_forecast(self):
+        self.clock.weather_forecast = [
+            {
+                "label": "Today",
+                "date": "2026-10-09",
+                "condition": "Clear sky",
+                "icon": "bi-sun-fill",
+                "high": 18,
+                "low": 9,
+            },
+            {
+                "label": "Tomorrow",
+                "date": "2026-10-10",
+                "condition": "Rain",
+                "icon": "bi-cloud-rain-fill",
+                "high": 15,
+                "low": 8,
+            },
+        ]
+        self.clock.weather_last_polled_at = timezone.now()
+        self.clock.save()
+
+        response = self.client.get(reverse("clock:render", args=[self.clock.pk]))
+
+        self.assertContains(response, "London")
+        self.assertContains(response, "Clear sky")
+        self.assertContains(response, "Tomorrow")
+        self.assertContains(response, "Weather data by")
