@@ -8,9 +8,9 @@ A studio clock for broadcast radio.
 and collects static files in one-shot containers, and then starts the app. The
 app waits for both steps to finish successfully. The database data and
 collected static files are stored in named volumes, so they remain available
-when containers are recreated. Compose uses `clock` as the default database
-name, user, and password; set `DB_NAME`, `DB_USER`, and `DB_PASSWORD` in `.env`
-to override them.
+when containers are recreated. WhiteNoise serves the collected files from the
+app. Compose uses `clock` as the default database name, user, and password; set
+`DB_NAME`, `DB_USER`, and `DB_PASSWORD` in `.env` to override them.
 
 ## Now playing
 
