@@ -2,6 +2,14 @@
 
 A studio clock for broadcast radio.
 
+## Docker Compose
+
+`docker compose up --build` starts the app with PostgreSQL. The database data
+and Django's collected static files are stored in named volumes, so they remain
+available when containers are recreated. Compose uses `clock` as the default
+database name, user, and password; set `DB_NAME`, `DB_USER`, and `DB_PASSWORD`
+in `.env` to override them.
+
 ## Now playing
 
 Clock displays can be linked to a now-playing source when creating or editing a
