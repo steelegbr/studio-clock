@@ -17,6 +17,19 @@ services:
       postgres:
         condition: service_healthy
 
+  collectstatic:
+    build:
+      context: .
+    image: studio-clock:local
+    command:
+      ["uv", "run", "--no-sync", "python", "manage.py", "collectstatic", "--noinput"]
+    restart: "no"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    volumes:
+      - staticfiles:/app/staticfiles
+
   studio-clock:
     build:
       context: .
@@ -33,7 +46,7 @@ services:
       - "8000:8000"
     restart: unless-stopped
     depends_on:
-      migrate:
+      collectstatic:
         condition: service_completed_successfully
       postgres:
         condition: service_healthy
