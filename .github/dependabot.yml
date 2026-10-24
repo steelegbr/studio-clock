@@ -17,21 +17,6 @@ updates:
       - "dependencies"
       - "python"
 
-  # JavaScript / frontend dependencies
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    groups:
-      npm-dependencies:
-        patterns:
-          - "*"
-    open-pull-requests-limit: 5
-    labels:
-      - "dependencies"
-      - "frontend"
-
   # Docker base images
   - package-ecosystem: "docker"
     directory: "/"
