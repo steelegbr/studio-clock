@@ -9,7 +9,7 @@ class SongPlay(Model):
     station = ForeignKey(
         "Station", null=False, related_name="song_plays", on_delete=CASCADE
     )
-    timestamp = DateTimeField(auto_created=True)
+    timestamp = DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ["-timestamp"]

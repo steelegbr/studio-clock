@@ -1,14 +1,14 @@
 from rest_framework.serializers import (
     CharField,
     IntegerField,
-    ModelSerializer,
+    Serializer,
     ValidationError,
 )
 
 from studioclock.models import Song, SongPlay
 
 
-class SongPlayCreateSerializer(ModelSerializer):
+class SongPlayCreateSerializer(Serializer):
     artist = CharField(required=False)
     title = CharField(required=False)
     year = IntegerField(required=False, allow_null=True, min_value=1000, max_value=9999)
