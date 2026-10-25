@@ -4,6 +4,7 @@ from studioclock.models import Song
 
 
 class SongSerializer(ModelSerializer):
-    model = Song
-    fields = ("id", "artist", "title", "year")
-    read_only_fields = fields
+    class Meta:
+        model = Song
+        fields = ("id", "artist", "title", "year")
+        read_only_fields = fields

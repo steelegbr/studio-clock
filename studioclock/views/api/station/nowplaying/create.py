@@ -23,6 +23,6 @@ class SongPlayCreateView(CreateAPIView):
         song_play = serializer.save(station=self.get_station())
 
         return Response(
-            SongSerializer(song_play.data).data if song_play.song is not None else None,
+            SongSerializer(song_play.song).data if song_play.song is not None else None,
             status=HTTP_201_CREATED,
         )
