@@ -81,16 +81,17 @@
                             <div class="weather-unavailable">Set a weather location in clock settings</div>
                         {% endif %}
                     </section>
-                    <section class="clock-now-playing" aria-label="Now playing">
+                    <section class="clock-now-playing"
+                             aria-label="Now playing"
+                             data-status-url="{% url 'clock_api:now-playing' object.pk %}">
                         <div class="now-playing-idle">Nothing playing</div>
-                    {% endif %}
-                </section>
-            </aside>
-        </main>
-        <footer class="clock-status">
-            <div class="status-lamps"><!--Optional Status Lamps--></div>
-        </footer>
-    </div>
-    <script src="{% static 'studioclock/clock.js' %}"></script>
-</body>
+                    </section>
+                </aside>
+            </main>
+            <footer class="clock-status">
+                <div class="status-lamps"><!--Optional Status Lamps--></div>
+            </footer>
+        </div>
+        <script src="{% static 'studioclock/clock.js' %}"></script>
+    </body>
 </html>
