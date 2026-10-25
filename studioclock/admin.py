@@ -5,7 +5,6 @@ from studioclock.models import (
     Clock,
     Font,
     FontWeight,
-    NowPlayingSource,
     Song,
     SongPlay,
     Station,
@@ -28,12 +27,6 @@ class FontAdmin(ModelAdmin):
 class FontWeightAdmin(ModelAdmin):
     list_display = ("font", "weight", "name")
     search_fields = ("font__name", "name")
-
-
-@register(NowPlayingSource)
-class NowPlayingSourceAdmin(ModelAdmin):
-    list_display = ("name", "endpoint_url", "enabled", "last_polled_at")
-    search_fields = ("name",)
 
 
 @register(Song)
