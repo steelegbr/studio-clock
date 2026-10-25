@@ -1,10 +1,9 @@
 from django.urls import path
 
 from studioclock.views.api.station import (
-    SongPlayCreateView,
-    SongPlayDetailView,
     StationDetailView,
     StationListCreateAPIView,
+    StationNowPlayingView,
 )
 
 urlpatterns = [
@@ -12,12 +11,7 @@ urlpatterns = [
     path("<str:name>/", StationDetailView.as_view(), name="station-detail"),
     path(
         "<str:name>/now-playing/",
-        SongPlayCreateView.as_view(),
-        name="station-songplay-create",
-    ),
-    path(
-        "<str:name>/now-playing/",
-        SongPlayDetailView.as_view(),
-        name="station-songplay-detail",
+        StationNowPlayingView.as_view(),
+        name="station-now-playing",
     ),
 ]

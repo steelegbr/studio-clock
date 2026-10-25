@@ -1,4 +1,4 @@
-from rest_framework.serializers import BooleanField, ModelSerializer
+from rest_framework.serializers import BooleanField, ModelSerializer, Serializer
 
 from studioclock.models import Song
 
@@ -9,6 +9,6 @@ class NowPlayingSongSerializer(ModelSerializer):
         fields = ("artist", "title", "year")
 
 
-class NowPlayingResultSerializer(ModelSerializer):
+class NowPlayingResultSerializer(Serializer):
     is_playing_a_song = BooleanField()
     song = NowPlayingSongSerializer(allow_null=True)
