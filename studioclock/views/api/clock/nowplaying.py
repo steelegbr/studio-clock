@@ -28,7 +28,7 @@ class ClockNowPlayingView(APIView):
                 "artist": song_play.song.artist,
                 "title": song_play.song.title,
                 "artwork_url": song_play.song.artwork_url or "",
-                "poll_interval_seconds": 30,
+                "poll_interval_seconds": 5,
             }
         )
 
@@ -39,7 +39,7 @@ class ClockNowPlayingView(APIView):
             "artist": "",
             "title": "",
             "artwork_url": "",
-            "poll_interval_seconds": 30,
+            "poll_interval_seconds": 5,
         }
 
     def get_permissions(self):
