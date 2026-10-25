@@ -1,13 +1,8 @@
 import json
 import logging
-from datetime import timedelta
 from urllib.error import URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
-
-from django.utils import timezone
-
-from studioclock.models import NowPlayingSource
 
 logger = logging.getLogger(__name__)
 REQUEST_TIMEOUT_SECONDS = 3
