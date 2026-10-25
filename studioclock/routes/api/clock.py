@@ -1,7 +1,8 @@
 from django.urls import path
 
-from studioclock.views.api.clock import NowPlayingStatusView
+from studioclock.views.api.clock import ClockNowPlayingView, ClockWeatherView
 
 urlpatterns = [
-    path("<uuid:pk>/now-playing/", NowPlayingStatusView.as_view(), name="now-playing")
+    path("<uuid:pk>/now-playing/", ClockNowPlayingView.as_view(), name="now-playing"),
+    path("<uuid:pk>/weather/", ClockWeatherView.as_view(), name="weather"),
 ]

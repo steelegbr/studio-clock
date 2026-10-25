@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Delete Lower Third{% endblock %}
+{% block page_title %}Delete Lower Third{% endblock %}
+{% block content %}
+    <p>Are you sure you want to delete the lower third "{{ object.name }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="{% url 'lowerthird:list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+{% endblock %}

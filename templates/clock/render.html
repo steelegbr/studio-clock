@@ -51,7 +51,7 @@
                     <section class="clock-weather"
                              id="clock-weather"
                              aria-label="Weather forecast"
-                             {% if object.weather_location %}data-status-url="{% url 'clock:weather' object.pk %}"{% endif %}>
+                             {% if object.weather_location %}data-status-url="{% url 'clock_api:weather' object.pk %}"{% endif %}>
                         {% if weather.available %}
                             <div class="weather-heading">
                                 <div class="weather-title">WEATHER</div>

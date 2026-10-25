@@ -1,3 +1,4 @@
-from studioclock.views.api.clock.nowplaying import NowPlayingStatusView
+from studioclock.views.api.clock.nowplaying import ClockNowPlayingView
+from studioclock.views.api.clock.weather import ClockWeatherView
 
-__all__ = ["NowPlayingStatusView"]
+__all__ = ["ClockNowPlayingView", "ClockWeatherView"]

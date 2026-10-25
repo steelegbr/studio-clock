@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from studioclock.models import Clock
 
 
-class NowPlayingStatusView(APIView):
+class ClockNowPlayingView(APIView):
     def get(self, request, pk):
         clock = get_object_or_404(Clock.objects.select_related("station"), pk=pk)
         station = clock.station
@@ -28,7 +28,7 @@ class NowPlayingStatusView(APIView):
                 "artist": song_play.song.artist,
                 "title": song_play.song.title,
                 "artwork_url": song_play.song.artwork_url or "",
-                "poll_interval_seconds": 30,
+                "poll_interval_seconds": 5,
             }
         )
 
@@ -39,7 +39,7 @@ class NowPlayingStatusView(APIView):
             "artist": "",
             "title": "",
             "artwork_url": "",
-            "poll_interval_seconds": 30,
+            "poll_interval_seconds": 5,
         }
 
     def get_permissions(self):

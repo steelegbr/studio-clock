@@ -1,0 +1,80 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: transparent;
+}
+
+.lower-third {
+    position: fixed;
+    bottom: 70px;
+    left: 0;
+
+    width: 70vw;
+    padding: 10px;
+
+    color: var(--lower-third-foreground, white);
+    background-color: var(--lower-third-background, purple);
+    font-family: var(--lower-third-font, sans-serif);
+    font-weight: var(--lower-third-font-weight, 700);
+
+    border: 10px solid white;
+    border-left: 0;
+
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 0, 0.5);
+
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+}
+
+.lower-third--on {
+    animation-name: slide-in;
+}
+
+.lower-third--off {
+    animation-name: slide-out;
+}
+
+.lower-third__title {
+    margin: 0;
+    padding-left: 40px;
+    font-size: 3em;
+    font-weight: bold;
+}
+
+.lower-third__artist {
+    margin: 0;
+    padding-left: 40px;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+@keyframes slide-in {
+    0% {
+        translate: -150vw 0;
+        scale: 200% 1;
+    }
+
+    100% {
+        translate: 0 0;
+        scale: 100% 1;
+    }
+}
+
+@keyframes slide-out {
+    0% {
+        translate: 0 0;
+        scale: 100% 1;
+    }
+
+    100% {
+        translate: -150vw 0;
+        scale: 200% 1;
+    }
+}
