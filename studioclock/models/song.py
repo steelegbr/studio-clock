@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from django.db.models import Model, PositiveIntegerField, TextField, UUIDField
+from django.db.models import Model, PositiveIntegerField, TextField, URLField, UUIDField
 
 from studioclock.validators import valid_year
 
@@ -13,6 +13,7 @@ class Song(Model):
         null=True,
         validators=[valid_year],
     )
+    artwork_url = URLField(null=True)
 
     def __str__(self):
         if self.year:

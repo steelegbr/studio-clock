@@ -24,9 +24,9 @@ class NowPlayingStatusView(APIView):
         return Response(
             {
                 "is_playing": True,
-                "artist": song_play.artist,
-                "title": song_play.title,
-                "artwork_url": song_play.artwork_url or "",
+                "artist": song_play.song.artist,
+                "title": song_play.song.title,
+                "artwork_url": song_play.song.artwork_url or "",
                 "poll_interval_seconds": 30,
             }
         )
