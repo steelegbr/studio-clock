@@ -13,6 +13,7 @@ from studioclock.forms.auth import LoginForm
 urlpatterns = [
     path("", include("studioclock.routes.base")),
     path("admin/", admin.site.urls),
+    path("api/", include("studioclock.routes.api")),
     path("clock/", include("studioclock.routes.clock")),
     path(
         "users/login/", LoginView.as_view(authentication_form=LoginForm), name="login"
