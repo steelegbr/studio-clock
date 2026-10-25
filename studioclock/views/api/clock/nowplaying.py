@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from studioclock.models import Clock
 
 
-class NowPlayingStatusView(APIView):
+class ClockNowPlayingView(APIView):
     def get(self, request, pk):
         clock = get_object_or_404(Clock.objects.select_related("station"), pk=pk)
         station = clock.station
