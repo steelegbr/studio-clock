@@ -11,7 +11,7 @@ class LowerThird(Model):
     background_colour = ColorField(default="#FFFFFF", blank=False, null=False)
     foreground_colour = ColorField(default="#000000", blank=False, null=False)
     station = ForeignKey("Station", null=False, on_delete=CASCADE)
-    font = ForeignKey("FontWeight", on_delete=CASCADE, blank=True, null=True)
+    font = ForeignKey("Font", on_delete=CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.name
