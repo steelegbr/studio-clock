@@ -1,9 +1,12 @@
 from django.shortcuts import get_object_or_404
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED
 from rest_framework.views import APIView
 
 from studioclock.models import Station
+from studioclock.permissions import CanCreateSongPlay
 from studioclock.serializers import (
     NowPlayingResultSerializer,
     SongPlayCreateSerializer,
@@ -12,6 +15,8 @@ from studioclock.serializers import (
 
 
 class StationNowPlayingView(APIView):
+    authentication_classes = (TokenAuthentication,)
+
     def get_station(self, name):
         return get_object_or_404(Station, name=name)
 
@@ -49,3 +54,9 @@ class StationNowPlayingView(APIView):
             SongSerializer(song).data if song is not None else None,
             status=HTTP_201_CREATED,
         )
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [AllowAny()]
+
+        return [CanCreateSongPlay()]
