@@ -3,7 +3,8 @@
 {% block page_title %}Lower Thirds{% endblock %}
 {% block content %}
     {% if perms.studioclock.add_lowerthird %}
-        <a class="btn btn-primary mb-3"><i class="bi bi-plus-circle"></i> Create New Clock</a>
+        <a href="{% url 'lowerthird:create' %}"
+           class="btn btn-primary mb-3"><i class="bi bi-plus-circle"></i> Create New Lower Third</a>
     {% endif %}
     <table class="table table-striped">
         <thead>
@@ -19,12 +20,13 @@
                     <td>{{ lowerthird.name }}</td>
                     <td>{{ lowerthird.description }}</td>
                     <td>
-                        <a class="btn btn-primary btn-sm"><i class="bi bi-clock"></i> View</a>
                         {% if perms.studioclock.change_lowerthird %}
-                            <a class="btn btn-secondary btn-sm"><i class="bi bi-pencil"></i> Edit</a>
+                            <a href="{% url 'lowerthird:edit' pk=lowerthird.pk %}"
+                               class="btn btn-secondary btn-sm"><i class="bi bi-pencil"></i> Edit</a>
                         {% endif %}
-                        {% if perms.studioclock.delete_clowerthird %}
-                            <a class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Delete</a>
+                        {% if perms.studioclock.delete_lowerthird %}
+                            <a href="{% url 'lowerthird:delete' pk=lowerthird.pk %}"
+                               class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Delete</a>
                         {% endif %}
                     </td>
                 </tr>

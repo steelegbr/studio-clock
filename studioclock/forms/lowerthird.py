@@ -4,7 +4,7 @@ from django.forms import ModelForm, Select, Textarea, TextInput
 from studioclock.models import LowerThird
 
 
-class LowerThird(ModelForm):
+class LowerThirdForm(ModelForm):
     class Meta:
         model = LowerThird
         fields = [
