@@ -1,7 +1,7 @@
 from colorfield.widgets import ColorWidget
 from django.forms import FileInput, ModelForm, Select, Textarea, TextInput
 
-from studioclock.models import Clock, NowPlayingSource
+from studioclock.models import Clock
 
 
 class ClockForm(ModelForm):
@@ -21,7 +21,7 @@ class ClockForm(ModelForm):
             "background_colour",
             "foreground_colour",
             "font",
-            "now_playing_source",
+            "station",
             "weather_location",
             "weather_units",
         ]
@@ -51,7 +51,7 @@ class ClockForm(ModelForm):
             "background_colour": ColorWidget(),
             "foreground_colour": ColorWidget(),
             "font": Select(attrs={"class": "form-select"}),
-            "now_playing_source": Select(attrs={"class": "form-select"}),
+            "station": Select(attrs={"class": "form-select"}),
             "weather_location": TextInput(
                 attrs={
                     "class": "form-control",
@@ -66,7 +66,3 @@ class ClockForm(ModelForm):
         self.fields[
             "weather_location"
         ].help_text = "Enter a city or place name to show its forecast. Leave blank to hide weather."
-        if not self.instance.pk:
-            self.fields["now_playing_source"].initial = NowPlayingSource.objects.filter(
-                enabled=True
-            ).first()

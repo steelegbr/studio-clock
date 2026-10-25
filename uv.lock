@@ -69,6 +69,18 @@ wheels = [
 ]
 
 [[package]]
+name = "django-filter"
+version = "26.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/07/ee/c0f950fe24f3e0b69d054ad957f9229632b50bdc78e968f966d8b4efe16a/django_filter-26.2.tar.gz", hash = "sha256:fd5cc83995fbe9f5f07fb5dcda16fde0f04de1ecf8ef82628b6c0ec921b751af", size = 144828, upload-time = "2026-10-03T12:01:01.007Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4a/92/6b098caa5b980a9d13a8db4825b7670410fa572e9195e39648f7700f2a37/django_filter-26.2-py3-none-any.whl", hash = "sha256:df8f737841d6359df00b84dda9b5ab59067fe60292091f1bdae1e3e6281cedb0", size = 94077, upload-time = "2026-10-03T12:00:59.162Z" },
+]
+
+[[package]]
 name = "django-unfold"
 version = "0.110.0"
 source = { registry = "https://pypi.org/simple" }
@@ -78,6 +90,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/44/45/8fed87cc80291ab694c46fa3c113dff3e25cc7b1de843f5c334679f9128d/django_unfold-0.110.0.tar.gz", hash = "sha256:cd0bbfd3b96454b6e6eccea98996f9de634e1aa08956807943011b12f2fbcdf2", size = 1172280, upload-time = "2026-10-13T06:47:18.085Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/2b/d1/d9f998dcd02fbdcc5a63836ac3025e170f3a99cfdc0b64efe7a4ab1e861c/django_unfold-0.110.0-py3-none-any.whl", hash = "sha256:5b20e87cf389376398dee19f9e168ad1f8c4cd5e53850b4b7d38bb1e17c14f9a", size = 1301431, upload-time = "2026-10-13T06:47:16.414Z" },
+]
+
+[[package]]
+name = "djangorestframework"
+version = "3.18.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8d/b2/1cee76b188301f7d03169ca77fab2b3d3ec5d01b3469189f944af2d7f11a/djangorestframework-3.18.3.tar.gz", hash = "sha256:446a9b352e7eff630421ab3f2328bd2401b109a9470afa4a31189994911ed030", size = 923563, upload-time = "2026-10-06T21:33:51.521Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c4/dd/de5f4543765bec94e036a5e9593a42f8fa7efec8de78eb56b9ca834385f3/djangorestframework-3.18.3-py3-none-any.whl", hash = "sha256:8544bb674846731b1e3c9b309236ee1dc412905a0aa725be2ec193ca950a7d12", size = 903986, upload-time = "2026-10-06T21:33:49.917Z" },
 ]
 
 [[package]]
@@ -187,6 +211,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/16/1f/58a4d7ee466f81bc3c7337036380fc6d49de3afb7855d74f8121b1e89b32/json5-0.17.3.tar.gz", hash = "sha256:8d0278ad34ebaa9c3af76d9519274811830224a2d1cd5af156dbd067f461b8a4", size = 54234, upload-time = "2026-10-09T21:19:28.335Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ae/39/e689b616c4279a821d5842a8a85c1874540f8d58e35028df93f2182120c2/json5-0.17.3-py3-none-any.whl", hash = "sha256:2c8b22a893c35cd6a3c5ccbf1dd1c7d02c25dc1b5897fea658f9bf08c2e05f9a", size = 34809, upload-time = "2026-10-09T21:19:27.357Z" },
+]
+
+[[package]]
+name = "markdown"
+version = "3.11.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f4/32/0b4d0297064244f04af4331b65de16237cc3cce07474171ee14222a28981/markdown-3.11.2.tar.gz", hash = "sha256:87bf5d90f2d2882e2c02fcda182c2800456b985bff38913867c49706481514b0", size = 491445, upload-time = "2026-10-19T19:41:42.687Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fe/66/bcab3b677b71ad286b4e607e3427499537c76e13ad2e22584ba7a7d9882c/markdown-3.11.2-py3-none-any.whl", hash = "sha256:f80390747a2a0ff2ba54da074ce4f862f72a6685f608cd2637b646a6d83993f5", size = 114266, upload-time = "2026-10-19T19:41:41.244Z" },
 ]
 
 [[package]]
@@ -418,8 +451,11 @@ dependencies = [
     { name = "django" },
     { name = "django-colorfield" },
     { name = "django-environ" },
+    { name = "django-filter" },
     { name = "django-unfold" },
+    { name = "djangorestframework" },
     { name = "gunicorn" },
+    { name = "markdown" },
     { name = "psycopg2-binary" },
     { name = "whitenoise" },
 ]
@@ -435,8 +471,11 @@ requires-dist = [
     { name = "django", specifier = ">=6.1.1" },
     { name = "django-colorfield", specifier = ">=0.14.0" },
     { name = "django-environ", specifier = ">=0.14.0" },
+    { name = "django-filter", specifier = ">=26.2" },
     { name = "django-unfold", specifier = ">=0.108.0" },
+    { name = "djangorestframework", specifier = ">=3.18.3" },
     { name = "gunicorn", specifier = ">=26.2.0" },
+    { name = "markdown", specifier = ">=3.11.2" },
     { name = "psycopg2-binary", specifier = ">=2.9.13" },
     { name = "whitenoise", specifier = ">=6.9.0" },
 ]
