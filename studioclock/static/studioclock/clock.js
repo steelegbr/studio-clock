@@ -496,3 +496,62 @@ switch (clockSettings.clock_type) {
     default:
         console.error('Unknown clock type:', clockSettings.clock_type);
 }
+
+
+function initialiseLampPolling() {
+    const container = document.querySelector("#status-lamps");
+
+    if (!container) {
+        return;
+    }
+
+    const url = container.dataset.lampsUrl;
+    let polling = false;
+
+    async function refreshLamps() {
+        if (polling) {
+            return;
+        }
+
+        polling = true;
+
+        try {
+            const response = await fetch(url, {
+                headers: { Accept: "application/json" },
+                cache: "no-store",
+            });
+
+            if (!response.ok) {
+                throw new Error(`Lamp API returned ${response.status}`);
+            }
+
+            const payload = await response.json();
+
+            for (const lamp of payload.lamps) {
+                const element = Array.from(
+                    container.querySelectorAll("[data-lamp-slug]")
+                ).find(item => item.dataset.lampSlug === lamp.slug);
+
+                if (!element || typeof lamp.state !== "boolean") {
+                    continue;
+                }
+
+                element.dataset.state = lamp.state ? "on" : "off";
+                element.setAttribute(
+                    "aria-label",
+                    `${lamp.name}: ${lamp.state ? "on" : "off"}`
+                );
+            }
+        } catch (error) {
+            // Preserve the last known state during temporary failures.
+            console.error("Unable to refresh studio lamps:", error);
+        } finally {
+            polling = false;
+        }
+    }
+
+    refreshLamps();
+    window.setInterval(refreshLamps, 2000);
+}
+
+initialiseLampPolling();
