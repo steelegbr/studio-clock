@@ -21,8 +21,8 @@
                 <tr>
                     <td>{{ lamp.name }}</td>
                     <td>{{ lamp.slug }}</td>
-                    <td>TBC</td>
-                    <td>TBC</td>
+                    <td>{% include "includes/enabled.html" with field=lamp.enabled %}</td>
+                    <td>{% include "includes/on.html" with field=lamp.state %}</td>
                     <td>
                         {% if perms.studioclock.change_lamp %}
                             <a href="{% url 'lamp:edit' pk=lamp.pk %}"
