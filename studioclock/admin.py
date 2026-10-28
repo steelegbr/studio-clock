@@ -5,6 +5,7 @@ from studioclock.models import (
     Clock,
     Font,
     FontWeight,
+    Lamp,
     LowerThird,
     Song,
     SongPlay,
@@ -28,6 +29,12 @@ class FontAdmin(ModelAdmin):
 class FontWeightAdmin(ModelAdmin):
     list_display = ("font", "weight", "name")
     search_fields = ("font__name", "name")
+
+
+@register(Lamp)
+class LampAdmin(ModelAdmin):
+    list_display = ("name", "slug")
+    search_fields = ("name", "slug")
 
 
 @register(LowerThird)
