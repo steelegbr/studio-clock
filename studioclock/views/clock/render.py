@@ -15,6 +15,7 @@ class ClockRenderView(DetailView):
             self.object,
             exclude=[
                 "id",
+                "lamps",
                 "logo",
                 "weather_latitude",
                 "weather_longitude",

@@ -89,7 +89,20 @@
                 </aside>
             </main>
             <footer class="clock-status">
-                <div class="status-lamps"><!--Optional Status Lamps--></div>
+                <div class="status-lamps"
+                     id="status-lamps"
+                     data-lamps-url="{% url 'clock_api:lamps' object.pk %}">
+                    {% for lamp in object.lamps.all %}
+                        <div class="status-lamp"
+                             data-lamp-slug="{{ lamp.slug }}"
+                             data-state="unknown"
+                             style="--lamp-colour: {{ lamp.colour }}"
+                             role="status"
+                             aria-label="{{ lamp.name }}: status unknown">
+                            <span class="status-lamp-label">{{ lamp.name }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
             </footer>
         </div>
         <script src="{% static 'studioclock/clock.js' %}"></script>

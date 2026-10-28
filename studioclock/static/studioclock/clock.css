@@ -256,3 +256,86 @@ html, body {
     justify-content: center;
     gap: 1rem;
 }
+
+
+.status-lamps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 1rem;
+}
+
+.status-lamp {
+    --lamp-colour: #ff3030;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 8rem;
+    min-height: 2.75rem;
+    padding: 0.55rem 1rem;
+
+    border: 1px solid color-mix(
+        in srgb,
+        var(--lamp-colour) 40%,
+        #303640
+    );
+    border-radius: 0.3rem;
+
+    background: color-mix(
+        in srgb,
+        var(--lamp-colour) 16%,
+        #10151c
+    );
+
+    color: color-mix(
+        in srgb,
+        var(--lamp-colour) 65%,
+        #aeb7c4
+    );
+
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-transform: uppercase;
+
+    box-shadow: inset 0 1px 2px rgb(0 0 0 / 40%);
+
+    transition:
+        background-color 150ms ease,
+        box-shadow 150ms ease,
+        color 150ms ease;
+}
+
+.status-lamp[data-state="on"] {
+    background: var(--lamp-colour);
+    border-color: var(--lamp-colour);
+    color: #fff;
+
+    box-shadow:
+        inset 0 1px 2px rgb(255 255 255 / 25%),
+        0 0 0.5rem color-mix(
+            in srgb,
+            var(--lamp-colour) 75%,
+            transparent
+        ),
+        0 0 1.25rem color-mix(
+            in srgb,
+            var(--lamp-colour) 45%,
+            transparent
+        );
+}
+
+.status-lamp[data-state="off"] {
+    box-shadow: inset 0 1px 2px rgb(0 0 0 / 40%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .status-lamp {
+        transition: none;
+    }
+}
