@@ -23,6 +23,6 @@ class LampUpdateView(APIView):
 
         if lamp.state != new_state:
             lamp.state = new_state
-            lamp.save(update_fields=["state", "updated_at"])
+            lamp.save(update_fields=["state", "updated"])
 
         return Response({"slug": lamp.slug, "state": lamp.state})
