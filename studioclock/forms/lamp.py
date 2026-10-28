@@ -10,5 +10,5 @@ class LampForm(ModelForm):
         widgets = {
             "name": TextInput(attrs={"class": "form-control"}),
             "slug": TextInput(attrs={"class": "form-control"}),
-            "enabled": CheckboxInput(attrs={"class": "form-control"}),
+            "enabled": CheckboxInput(attrs={"class": "form-check-input"}),
         }
