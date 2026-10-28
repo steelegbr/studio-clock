@@ -9,6 +9,7 @@ from django.db.models import (
     ForeignKey,
     ImageField,
     JSONField,
+    ManyToManyField,
     Model,
     TextChoices,
     TextField,
@@ -51,6 +52,7 @@ class Clock(Model):
     weather_longitude = FloatField(blank=True, null=True)
     weather_forecast = JSONField(blank=True, default=list)
     weather_last_polled_at = DateTimeField(blank=True, null=True)
+    lamps = ManyToManyField("Lamp")
 
     def save(self, *args, **kwargs):
         update_fields = kwargs.get("update_fields")
