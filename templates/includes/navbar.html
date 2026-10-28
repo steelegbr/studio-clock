@@ -19,6 +19,9 @@
                     <a class="nav-link" href="{% url 'clock:list' %}">Clocks</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lamp:list' %}">Lamps</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{% url 'lowerthird:list' %}">Lower Thirds</a>
                 </li>
                 {% if user.is_superuser %}
