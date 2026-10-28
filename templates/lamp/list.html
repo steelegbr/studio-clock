@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Lamps{% endblock %}
+{% block page_title %}Lamps{% endblock %}
+{% block content %}
+    {% if perms.studioclock.add_lamp %}
+        <a href="{% url 'lamp:create' %}"
+           class="btn btn-primary mb-3"><i class="bi bi-plus-circle"></i> Create New Lamp</a>
+    {% endif %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Lamp</th>
+                <th>Slug</th>
+                <th>Enabled</th>
+                <th>State</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lamp in object_list %}
+                <tr>
+                    <td>{{ lamp.name }}</td>
+                    <td>{{ lamp.slug }}</td>
+                    <td>TBC</td>
+                    <td>TBC</td>
+                    <td>
+                        {% if perms.studioclock.change_lamp %}
+                            <a href="{% url 'lamp:edit' pk=lamp.pk %}"
+                               class="btn btn-secondary btn-sm"><i class="bi bi-pencil"></i> Edit</a>
+                        {% endif %}
+                        {% if perms.studioclock.delete_lamp %}
+                            <a href="{% url 'lamp:delete' pk=lamp.pk %}"
+                               class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">No lamps available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% include "includes/pagination.html" %}
+{% endblock %}
