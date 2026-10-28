@@ -1,3 +1,4 @@
+from colorfield.widgets import ColorWidget
 from django.forms import CheckboxInput, ModelForm, TextInput
 
 from studioclock.models import Lamp
@@ -10,5 +11,6 @@ class LampForm(ModelForm):
         widgets = {
             "name": TextInput(attrs={"class": "form-control"}),
             "slug": TextInput(attrs={"class": "form-control"}),
+            "colour": ColorWidget(),
             "enabled": CheckboxInput(attrs={"class": "form-check-input"}),
         }

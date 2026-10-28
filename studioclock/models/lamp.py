@@ -1,5 +1,6 @@
 from uuid import uuid4
 
+from colorfield.fields import ColorField
 from django.db.models import (
     BooleanField,
     DateTimeField,
@@ -16,6 +17,7 @@ class Lamp(Model):
     name = TextField(unique=True)
     enabled = BooleanField(default=True)
     state = BooleanField(default=False)
+    colour = ColorField(default="#FF0000", blank=False, null=False)
     updated = DateTimeField(auto_now=True)
 
     def __str__(self):
