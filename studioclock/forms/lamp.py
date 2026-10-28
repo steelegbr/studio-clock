@@ -7,7 +7,7 @@ from studioclock.models import Lamp
 class LampForm(ModelForm):
     class Meta:
         model = Lamp
-        fields = ["name", "slug", "enabled"]
+        fields = ["name", "slug", "colour", "enabled"]
         widgets = {
             "name": TextInput(attrs={"class": "form-control"}),
             "slug": TextInput(attrs={"class": "form-control"}),
