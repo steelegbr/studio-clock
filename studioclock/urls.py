@@ -15,6 +15,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("studioclock.routes.api")),
     path("clock/", include("studioclock.routes.clock")),
+    path("lamp/", include("studioclock.routes.lamp")),
     path("lowerthird/", include("studioclock.routes.lowerthird")),
     path(
         "users/login/", LoginView.as_view(authentication_form=LoginForm), name="login"
