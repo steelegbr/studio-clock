@@ -1,5 +1,6 @@
 from django.forms import CheckboxInput, ModelForm, TextInput
-from models import Lamp
+
+from studioclock.models import Lamp
 
 
 class LampForm(ModelForm):
